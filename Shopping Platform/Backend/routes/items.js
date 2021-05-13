@@ -49,4 +49,50 @@ router.route('/:id').get(async(req, res)=>{
         res.status(500).send({status: "Error with get item", error:err.message});
     })
 })
+
+
+
+router.route("/update/:id").put(async (req, res)=>{
+
+    let itemId = req.params.id // get as a parameter in url //fetch id
+    const {name,
+        price,
+        description,
+        category } = req.body;
+
+    const updateItem = {
+        name,
+        price,
+        description,
+        category 
+    }
+
+    //check the user is exists
+
+    const upadte = await Student.findByIdAndUpdate(itemId , updateItem ).
+    then(()=>{
+        res.status(200).send({status : "item updated"})
+    }).catch((err)=>{
+        console.log(err);
+        res.status(500).send({status :"error with updating "})
+ })
+
+    
+
+})
+
+router.route("/delete/:id").delete(async (req,res)=>{
+    let itemId = req.params.id;
+    await Item.findByIdAndDelete(itemId).then(()=>{
+        res.status(200).send({status:"item deleted"})
+    }).catch((err)=>{
+        console.log(err);
+        res.status(500).send({status :"error with deleting"})
+ })
+    
+})
+
+
+
+
 module.exports = router;
